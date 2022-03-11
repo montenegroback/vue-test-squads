@@ -1,5 +1,5 @@
 <template>
-  <va-card class="wrapper__character-item">
+  <va-card class="wrapper__character-item" @click="onInfoCharacterInfo">
     <va-image :src="character.image" style="height: 200px" />
     <va-card-content>
       <small
@@ -15,9 +15,26 @@
       <p class="seen">{{ character.origin.name }}</p>
     </va-card-content>
   </va-card>
+  <wrapper-modal :showModal="showInfoCharacter" @onClose="onCloseInfoCharacter">
+    <character-item-info :character="character" />
+  </wrapper-modal>
 </template>
 
 <script setup>
+import { ref } from "vue";
+import CharacterItemInfo from "@/components/characters/CharacterItemInfo.vue";
+import WrapperModal from "@/components/WrapperModal.vue";
+
+const showInfoCharacter = ref(false);
+
+const onInfoCharacterInfo = () => {
+  showInfoCharacter.value = true;
+};
+
+const onCloseInfoCharacter = () => {
+  showInfoCharacter.value = false;
+};
+
 defineProps({
   character: {
     type: Object,
@@ -31,7 +48,7 @@ defineProps({
 
 .wrapper__character-item {
   cursor: pointer;
-  
+
   .va-card__inner {
     display: flex;
 
@@ -63,6 +80,12 @@ defineProps({
       border-radius: 50%;
       margin-right: 5px;
     }
+  }
+}
+
+.va-modal {
+  .va-modal__inner {
+    padding: 0 !important;
   }
 }
 </style>

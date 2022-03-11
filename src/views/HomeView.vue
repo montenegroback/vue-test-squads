@@ -28,7 +28,7 @@
       <div class="layout gutter--lg">
         <p class="star-favorites mb-4">
           Mostrar favoritos
-          <span><va-icon name="star_rate" /></span>
+          <favorite-star />
         </p>
         <div
           class="has-request-error d-flex align--center justify--center"
@@ -42,13 +42,15 @@
         </div>
 
         <div class="items" v-else>
-          <div class="row">
-            <div
-              class="flex xs12 sm12 md6 lg4 mb-2"
-              v-for="(character, index) in characters"
-              :key="index"
-            >
-              <character-item :character="character"></character-item>
+          <div class="layout gutter--md">
+            <div class="row">
+              <div
+                class="flex xs12 sm12 md6 lg4 mb-2"
+                v-for="(character, index) in characters"
+                :key="index"
+              >
+                <character-item :character="character"></character-item>
+              </div>
             </div>
           </div>
           <div class="paginator my-5 d-flex align--center justify--center">
@@ -68,29 +70,31 @@
 <script setup>
 import { ref, reactive, onMounted, computed, watch } from "vue";
 import PosterMain from "@/components/PosterMain.vue";
-import CharacterItem from "@/components/CharacterItem.vue";
+import CharacterItem from "@/components/characters/CharacterItem.vue";
 import FooterMain from "@/components/FooterMain.vue";
+import FavoriteStar from "@/components/FavoriteStar.vue";
 import api from "@/services/api";
 
-const localStorageDefaultQueryParams = JSON.parse(localStorage.getItem("getCharacterQueryParams"));
+const localStorageDefaultQueryParams = JSON.parse(
+  localStorage.getItem("getCharacterQueryParams")
+);
 
 const defaultQueryParams = {
   name: null,
   gender: null,
   page: 1,
 };
-
 const hasRequestError = ref(false);
 const categories = reactive(["All", "Unknown", "Female", "Male", "Genderless"]);
 const resultData = ref([]);
 const queryParams = ref(localStorageDefaultQueryParams || defaultQueryParams);
 const formatQueryParams = computed(() => {
   let query = queryParams.value;
-  if(query.gender === 'All') {
+  if (query.gender === "All") {
     query.gender = null;
   }
   return query;
-})
+});
 
 const characters = computed(() => resultData.value?.results || []);
 const infoPages = computed(() => resultData.value?.info?.pages);
@@ -113,10 +117,14 @@ const getCharacters = async () => {
   }
 };
 
-watch(queryParams, (v) => {
-  localStorage.setItem("getCharacterQueryParams", JSON.stringify(v));
-  getCharacters();
-}, { deep: true });
+watch(
+  queryParams,
+  (v) => {
+    localStorage.setItem("getCharacterQueryParams", JSON.stringify(v));
+    getCharacters();
+  },
+  { deep: true }
+);
 
 onMounted(() => {
   getCharacters();
@@ -132,16 +140,6 @@ onMounted(() => {
     display: flex;
     gap: 1em;
     align-items: center;
-
-    span {
-      background: #f2f2f2;
-      height: 40px;
-      width: 40px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      border-radius: 50%;
-    }
   }
 
   .has-request-error {
