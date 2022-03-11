@@ -1,0 +1,52 @@
+@import "@/assets/styles/base.css";
+@import "./reset.scss";
+@import url("https://fonts.googleapis.com/icon?family=Material+Icons");
+
+.wrapper__home-view {
+  .wrapper__poster-main {
+    .wrapper__filtering {
+      img {
+        max-width: 350px !important;
+
+        &.logo-suazo { display: none; }
+      }
+      .home-view-search {
+        .custom-input {
+          background: var(--vt-c-black) !important;
+          color: var(--vt-c-white);
+          min-width: 500px;
+
+          .va-input__container {
+            height: 60px !important;
+            border-radius: 6px;
+            input {
+              color: var(--vt-c-white);
+
+              &::placeholder {
+                color: var(--vt-c-white);
+              }
+
+              &:hover,
+              &:focus,
+              &:active {
+                border-color: var(--vt-c-white) !important;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  .tabs-categories {
+    background: var(--vt-c-white-mute);
+    .va-tabs__wrapper {
+      max-width: 1224px;
+      margin: auto;
+      .va-tabs__container {
+        height: 80px !important;
+        font-size: 18px;
+        font-weight: 400;
+      }
+    }
+  }
+}
