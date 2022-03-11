@@ -84,24 +84,27 @@ const defaultQueryParams = {
   gender: null,
   page: 1,
 };
+
 const hasRequestError = ref(false);
 const categories = reactive(["All", "Unknown", "Female", "Male", "Genderless"]);
 const resultData = ref([]);
-const queryParams = ref(localStorageDefaultQueryParams || defaultQueryParams);
+const characters = computed(() => resultData.value?.results || []);
+const infoPages = computed(() => resultData.value?.info?.pages);
+
+const queryParams = reactive(localStorageDefaultQueryParams || defaultQueryParams);
+
 const formatQueryParams = computed(() => {
-  let query = queryParams.value;
-  if (query.gender === "All") {
+  let query = queryParams;
+  if (query && query.gender === "All") {
     query.gender = null;
   }
   return query;
 });
 
-const characters = computed(() => resultData.value?.results || []);
-const infoPages = computed(() => resultData.value?.info?.pages);
-
 const onResetQueryParams = () => {
-  localStorage.removeItem("getCharacterQueryParams");
-  queryParams.value = { ...defaultQueryParams };
+  queryParams.name = null;
+  queryParams.gender = null;
+  queryParams.page = 1;
 };
 
 const getCharacters = async () => {
@@ -119,8 +122,11 @@ const getCharacters = async () => {
 
 watch(
   queryParams,
-  (v) => {
-    localStorage.setItem("getCharacterQueryParams", JSON.stringify(v));
+  () => {
+    localStorage.setItem(
+      "getCharacterQueryParams",
+      JSON.stringify(queryParams)
+    );
     getCharacters();
   },
   { deep: true }
